@@ -9,6 +9,10 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>$(AssemblyName)</Title>
     <Authors>OrnarasUS</Authors>
+    <Version>2025.01.15</Version>
+    <FileVersion>2025.01.15</FileVersion>
+    <AssemblyVersion>2025.01.15</AssemblyVersion>
+    <RepositoryUrl>https://github.com/OrnarasUS/OrnaLibs.Utils</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

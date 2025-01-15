@@ -35,7 +35,7 @@ namespace OrnaLibs
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public static int Select(string title, params string[] items)
+        public static int Select(string title, string[] items)
         {
             if(items.Length == 0) throw new ArgumentNullException("items");
             Console.CursorVisible = false;
@@ -98,7 +98,7 @@ namespace OrnaLibs
             return TimeRangeBox(title);
         }
 
-        public static bool CheckBox(string title, bool defaultValue)
+        public static bool Ask(string title, bool defaultValue)
         {
             ConsoleKey key;
             Console.Clear();

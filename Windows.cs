@@ -1,9 +1,7 @@
 ﻿using Microsoft.Win32;
 using OrnaLibs.DataTypes;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.Versioning;
-using System.Security.Principal;
 
 namespace OrnaLibs
 {
