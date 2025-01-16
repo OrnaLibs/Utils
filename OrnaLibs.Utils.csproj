@@ -9,9 +9,9 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>$(AssemblyName)</Title>
     <Authors>OrnarasUS</Authors>
-    <Version>2025.01.15</Version>
-    <FileVersion>2025.01.15</FileVersion>
-    <AssemblyVersion>2025.01.15</AssemblyVersion>
+    <Version>2025.01.17</Version>
+    <FileVersion>2025.01.17</FileVersion>
+    <AssemblyVersion>2025.01.17</AssemblyVersion>
     <RepositoryUrl>https://github.com/OrnarasUS/OrnaLibs.Utils</RepositoryUrl>
   </PropertyGroup>
 
@@ -22,5 +22,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Update="UpdaterConstants.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UpdaterConstants.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="UpdaterConstants.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UpdaterConstants.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 
 </Project>
