@@ -25,7 +25,7 @@ namespace OrnaLibs
         }
 
         [SupportedOSPlatform("windows")]
-        public static SerialPort[] GetSerialPorts()
+        private static SerialPort[] GetSerialPortsWindows()
         {
             using var registry = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM")!;
             var names = registry.GetValueNames();
