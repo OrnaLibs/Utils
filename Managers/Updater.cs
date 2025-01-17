@@ -13,14 +13,14 @@ public static class Updater
     private static int _interval;
     private static Version _version = null!;
 
-    public static async Task Init(string account, string repo, Version version, int interval = 3600, string execArgs = "")
+    public static void Init(string account, string repo, Version version, int interval = 3600, string execArgs = "")
     {
         _execArgs = execArgs;
         _account = account;
         _repo = repo;
         _version = version;
         _interval = interval;
-        await Checker();
+        Task.Run(Checker);
     }
 
     public static event Action OnUpdated;
