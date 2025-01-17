@@ -20,9 +20,10 @@ public static class Updater
         _repo = repo;
         _version = version;
         _interval = interval;
-        thread = new Thread(Checker().Start) { IsBackground = true };
-        thread.Start();
+        Task.Run(Checker);
     }
+
+    public static event Action OnUpdated;
 
     public static void Dispose() => thread?.Interrupt();
 
@@ -37,6 +38,7 @@ public static class Updater
                 {
                     var path = await DownloadFile(info.Item2, info.Item3);
                     Process.Start(path, _execArgs);
+                    OnUpdated.Invoke();
                 }
                 Thread.Sleep(_interval * 1000);
             }
@@ -55,8 +57,9 @@ public static class Updater
         var json = JsonNode.Parse(body);
         var projInfo = json?[_repo];
         if (projInfo is null) return (false, "", "");
-        if (!Version.TryParse(projInfo["version"]?.GetValue<string>(), out var lastVersion) || lastVersion > _version)
-            return (false, "", "");
+        if (!Version.TryParse(projInfo["version"]?.GetValue<string>(), out var lastVersion) ||
+            lastVersion.CompareTo(_version) <= 0)
+                return (false, "", "");
         var id = projInfo["id"]?.GetValue<string>()!;
         var token = projInfo["token"]?.GetValue<string>()!;
         return (true, id, token);
@@ -64,17 +67,21 @@ public static class Updater
 
     internal static async Task<string> DownloadFile(string id, string token)
     {
+        var path = $"{Path.GetTempPath()}{_repo}.exe";
         var url = new StringBuilder(UpdaterConstants.UpdaterUrl);
         url.Replace("%org%", _account);
         url.Replace("%repo%", _repo);
         url.Replace("%id%", id);
 
+        
         var req = new HttpRequestMessage(HttpMethod.Get, url.ToString());
-        req.Headers.Add("Authorization", $"token {token}");
+        if(!string.IsNullOrWhiteSpace(token))
+            req.Headers.Add("Authorization", $"token {token}");
+        req.Headers.Add("Accept", "application/octet-stream");
+        req.Headers.Add("User-Agent", "curl/7.64.1");
 
         using var http = new HttpClient();
         var resp = await http.SendAsync(req);
-        var path = $"{Path.GetTempPath()}.exe";
         using var fs = new FileStream(path!, FileMode.Create);
         await resp.Content.CopyToAsync(fs);
         return path;

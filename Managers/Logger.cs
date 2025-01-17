@@ -5,10 +5,17 @@
         private static Queue<string> Messages = new();
         private static Thread? thread;
         private static string _directory = null!;
+        private static int _interval;
 
-        public static void Init(string directory)
+        public static bool SetShowInConsole(bool showInConsole) =>
+            _showInConsole = showInConsole;
+
+        private static bool _showInConsole = false;
+
+        public static void Init(string directory, int interval = 100, bool showInConsole = false)
         {
             _directory = directory;
+            _showInConsole = showInConsole;
             thread = new Thread(WriteToFile) { IsBackground = true };
             thread.Start();
         }
@@ -24,7 +31,7 @@
             {
                 try
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(_interval);
                     while (Messages.TryDequeue(out var msg))
                         File.AppendAllText($"{_directory}\\{DateTime.Today:yyyyMMdd}.log", $"{msg}\n");
                 }
@@ -37,8 +44,12 @@
             }
         }
 
-        private static void AddRecord(string text, string level, Exception? ex = null) =>
-            Messages.Enqueue($"[{DateTime.Now:yyyy'-'MM'-'dd HH':'mm':'ss}] ({level}) {text}{(ex is null ? "" : $"\n{ex}")}");
+        private static void AddRecord(string text, string level, Exception? ex = null)
+        {
+            var msg = $"[{DateTime.Now:yyyy'-'MM'-'dd HH':'mm':'ss}] ({level}) {text}{(ex is null ? "" : $"\n\t{ex}")}";
+            if (_showInConsole) Console.WriteLine(msg);
+            Messages.Enqueue(msg);
+        }
 
         public static void Information(string text) => AddRecord(text, "INFO");
 

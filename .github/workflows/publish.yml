@@ -1,0 +1,40 @@
+name: Publish Application
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout project
+      uses: actions/checkout@v4
+    - name: Update version record
+      run: sed -i -e "s/0.0.0/${{ github.event.pull_request.title }}/g" OrnaLibs.Utils.csproj
+    - name: Install dotnet 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+    - name: Auth GitHub NuGet
+      run: dotnet nuget add source --username RetailWay --password ${{ secrets.TOKEN_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/RetailWay/index.json"
+    - name: Build project
+      run: dotnet build
+    - name: Set variables
+      id: vars
+      run: |
+        echo "nupkg=bin/Debug/$(ls bin/Debug | grep '\.nupkg')" >> $GITHUB_OUTPUT
+        echo "dll=bin/Debug/net8.0/$(ls bin/Debug/net8.0 | grep '\.dll')" >> $GITHUB_OUTPUT
+    - name: Publish to NuGet
+      run: |
+        dotnet nuget push ${{ steps.vars.outputs.nupkg }} --source "github"
+        dotnet nuget push ${{ steps.vars.outputs.nupkg }} --api-key ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json
+    - name: Publish to GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        repository: RetailWay/RetailCorrector
+        token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
+        files: ${{ steps.vars.outputs.dll }}
+        name: ${{ github.event.pull_request.title }}
+        tag_name: ${{ github.event.pull_request.title }}
+    
