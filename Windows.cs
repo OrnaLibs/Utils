@@ -34,5 +34,15 @@ namespace OrnaLibs
                 ports[i] = new SerialPort((string)registry.GetValue(names[i])!, names[i].Split('\\')[^1]);
             return ports;
         }
+        [SupportedOSPlatform("windows")]
+        private static void CreateWindowsService(string name, string displayName, string path)
+        {
+            var builder = new StringBuilder("New-Service");
+            builder.AppendFormat(" -Name \"{0}\"", name);
+            builder.AppendFormat(" -DisplayName \"{0}\"", displayName);
+            builder.AppendFormat(" -BinaryPathName \"{0}\"", path);
+            builder.AppendFormat(" -StartupType \"{0}\"", "Automatic");
+            PowerShell(builder.ToString());
+        }
     }
 }
