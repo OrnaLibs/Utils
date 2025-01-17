@@ -2,9 +2,9 @@
 {
     public abstract class Menu
     {
-        public abstract string Title { get; }
-        public abstract string[] Names { get; }
-        public abstract Action[] Actions { get; }
+        public abstract string Title { get; protected set; }
+        public abstract string[] Names { get; protected set; }
+        public abstract Action[] Actions { get; protected set; }
 
         public void Open()
         {
