@@ -17,7 +17,7 @@ jobs:
       with:
         dotnet-version: 8.x
     - name: Auth GitHub NuGet
-      run: dotnet nuget add source --username RetailWay --password ${{ secrets.TOKEN_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/RetailWay/index.json"
+      run: dotnet nuget add source --username OrnarasUS --password ${{ secrets.TOKEN_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/OrnarasUS/index.json"
     - name: Build project
       run: dotnet build
     - name: Set variables
@@ -32,7 +32,7 @@ jobs:
     - name: Publish to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        repository: RetailWay/RetailCorrector
+        repository: OrnarasUS/OrnaLibs.Utils
         token: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
         files: ${{ steps.vars.outputs.dll }}
         name: ${{ github.event.pull_request.title }}
