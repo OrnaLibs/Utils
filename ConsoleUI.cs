@@ -88,14 +88,18 @@ namespace OrnaLibs
             return d;
         }
 
-        public static TimeRange TimeRangeBox(string title)
+        public static TimeOnly TimeBox(string title, string format = "HH:mm")
         {
-            Console.Clear();
-            Console.Write($"{title} (Формат: HH:MM-HH:MM): ");
-            var res = Console.ReadLine();
-            if (res is null) return new TimeRange();
-            if (TimeRange.TryParse(res, out var d)) return d;
-            return TimeRangeBox(title);
+            TimeOnly t;
+            string? res;
+            do
+            {
+                Console.Clear();
+                Console.Write($"{title} (Формат: {format.Replace("'", "").ToUpper()}): ");
+                res = Console.ReadLine();
+                if (res is null) return TimeOnly.FromDateTime(DateTime.Today);
+            } while (!TimeOnly.TryParseExact(res, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out t));
+            return t;
         }
 
         public static bool Ask(string title, bool defaultValue)
@@ -113,7 +117,7 @@ namespace OrnaLibs
                 Console.SetCursorPosition(pos, 0);
             } while (!waitKeys.Contains(key));
 
-            return (key) switch
+            return key switch
             {
                 (ConsoleKey.L) => true,
                 (ConsoleKey.Y) => false,
