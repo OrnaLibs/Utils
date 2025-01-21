@@ -1,6 +1,6 @@
 ﻿namespace OrnaLibs.Managers
 {
-    public static class Scheduler
+    public static class TaskScheduler
     {
         private static TimeOnly?[] times = null!;
         private static Action?[] actions = null!;
