@@ -5,6 +5,7 @@
         private static TimeOnly?[] times = null!;
         private static Action?[] actions = null!;
         private static DateOnly?[] lastRun = null!;
+        private static int nullIndex = 0;
 
         private static int _interval;
         private static Thread _thread = null!;
@@ -19,11 +20,11 @@
 
         public static void RegisterTask(TimeOnly time, Action action)
         {
-            var index = FirstNullIndex(actions);
-            if (index == -1) throw new OverflowException();
-            actions[index] = action;
-            times[index] = time;
-            lastRun[index] = DateOnly.MinValue;
+            if (nullIndex == actions.Length) throw new OverflowException();
+            actions[nullIndex] = action;
+            times[nullIndex] = time;
+            lastRun[nullIndex] = DateOnly.MinValue;
+            nullIndex++;
         }
 
         public static void Start()
@@ -33,13 +34,6 @@
                 IsBackground = true
             };
             _thread.Start();
-        }
-
-        private static int FirstNullIndex(object?[] arr)
-        {
-            for (var i = 0; i < arr.Length; i++)
-                if (arr[i] is null) return i;
-            return -1;
         }
 
         private static void Loop()
@@ -57,7 +51,7 @@
                             times[i] = TimeOnly.FromDateTime(now);
                             lastRun[i] = DateOnly.FromDateTime(now);
                             actions[i]!.Invoke();
-                    }
+                        }
                     }
                     Thread.Sleep(_interval*1000);
                 }
