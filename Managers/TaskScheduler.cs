@@ -1,5 +1,8 @@
 ﻿namespace OrnaLibs.Managers
 {
+    /// <summary>
+    /// Планировщик задач
+    /// </summary>
     public static class TaskScheduler
     {
         private static TimeOnly?[] times = null!;
@@ -10,6 +13,11 @@
         private static int _interval;
         private static Thread _thread = null!;
 
+        /// <summary>
+        /// Инициализация планировщика
+        /// </summary>
+        /// <param name="countTasks">Количество задач</param>
+        /// <param name="checkInterval">Интервал между проверками задач в секундах</param>
         public static void Init(int countTasks, int checkInterval = 300)
         {
             times = new TimeOnly?[countTasks];
@@ -18,6 +26,12 @@
             _interval = checkInterval;
         }
 
+        /// <summary>
+        /// Регистрация задачи
+        /// </summary>
+        /// <param name="time">Время, в которое будет срабатывать действие</param>
+        /// <param name="action">Действие</param>
+        /// <exception cref="OverflowException">Вызывается, когда отсутствует место для регистрации нового задачи</exception>
         public static void RegisterTask(TimeOnly time, Action action)
         {
             if (nullIndex == actions.Length) throw new OverflowException();
@@ -27,6 +41,9 @@
             nullIndex++;
         }
 
+        /// <summary>
+        /// Запуск планировщика
+        /// </summary>
         public static void Start()
         {
             _thread = new(Loop)
@@ -62,6 +79,9 @@
             }
         }
 
+        /// <summary>
+        /// Отключение и освобожение планировщика
+        /// </summary>
         public static void Dispose() => _thread.Interrupt();
     }
 }
