@@ -48,11 +48,16 @@
             {
                 try
                 {
+                    var now = DateTime.Now;
                     for (var i = 0; i < actions.Length; i++)
                     {
                         if (actions[i] is null) continue;
-                        if (times[i] <= TimeOnly.FromDateTime(DateTime.Now) && lastRun[i] < DateOnly.FromDateTime(DateTime.Today))
+                        if (times[i] <= TimeOnly.FromDateTime(now) && lastRun[i] < DateOnly.FromDateTime(now))
+                        {
+                            times[i] = TimeOnly.FromDateTime(now);
+                            lastRun[i] = DateOnly.FromDateTime(now);
                             actions[i]!.Invoke();
+                    }
                     }
                     Thread.Sleep(_interval*1000);
                 }
