@@ -1,4 +1,5 @@
 ﻿using OrnaLibs.DataTypes;
+using System.Text;
 
 namespace OrnaLibs
 {
@@ -30,5 +31,14 @@ namespace OrnaLibs
             }
         }
 #pragma warning restore CA1416
+        public static string GetRandomString(int count)
+        {
+            var symbols = "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
+            var text = new StringBuilder();
+            var rnd = new Random();
+            for(var i = 0; i < count; i++)
+                text.Append(symbols[rnd.Next(symbols.Length)]);
+            return text.ToString();
+        }
     }
 }
