@@ -29,6 +29,7 @@ namespace OrnaLibs
         private static SerialPort[] GetSerialPortsWindows()
         {
             using var registry = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM")!;
+            if (registry is null) return [];
             var names = registry.GetValueNames();
             var ports = new SerialPort[names.Length];
             for (var i = 0; i < names.Length; i++)
