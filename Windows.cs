@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using OrnaLibs.DataTypes;
 using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Text;
@@ -26,14 +25,14 @@ namespace OrnaLibs
         }
 
         [SupportedOSPlatform("windows")]
-        private static SerialPort[] GetSerialPortsWindows()
+        private static (string, string)[] GetSerialPortsWindows()
         {
             using var registry = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM")!;
             if (registry is null) return [];
             var names = registry.GetValueNames();
-            var ports = new SerialPort[names.Length];
+            var ports = new (string, string)[names.Length];
             for (var i = 0; i < names.Length; i++)
-                ports[i] = new SerialPort((string)registry.GetValue(names[i])!, names[i].Split('\\')[^1]);
+                ports[i] = ((string)registry.GetValue(names[i])!, names[i].Split('\\')[^1]);
             return ports;
         }
         [SupportedOSPlatform("windows")]

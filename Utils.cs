@@ -1,4 +1,3 @@
-﻿using OrnaLibs.DataTypes;
 using System.Text;
 
 namespace OrnaLibs
@@ -6,7 +5,7 @@ namespace OrnaLibs
     public static partial class Utils
     {
 #pragma warning disable CA1416
-        public static SerialPort[] GetSerialPorts() =>
+        public static (string Port, string Device)[] GetSerialPorts() =>
             Environment.OSVersion.Platform switch
             {
                 PlatformID.Win32NT => GetSerialPortsWindows(),
