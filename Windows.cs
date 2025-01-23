@@ -23,6 +23,19 @@ namespace OrnaLibs
             };
             Process.Start(info);
         }
+        /// <summary>
+        /// Выполнение скрипта в PowerShell
+        /// </summary>
+        [SupportedOSPlatform("windows")]
+        public static void CMD(string script) =>
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "cmd",
+                Arguments = $"/q /c \"{script}\"",
+                Verb = "runas",
+                CreateNoWindow = true,
+                UseShellExecute = true
+            });
 
         [SupportedOSPlatform("windows")]
         private static (string, string)[] GetSerialPortsWindows()
