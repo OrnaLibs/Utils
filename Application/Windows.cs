@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System.Runtime.Versioning;
+using System.Text;
 
 namespace OrnaLibs;
 
@@ -22,5 +23,16 @@ public partial struct Application
             reg.SetValue("ModifyPath", Configurator, RegistryValueKind.String);
         if (!string.IsNullOrWhiteSpace(Uninstaller))
             reg.SetValue("UninstallString", Uninstaller, RegistryValueKind.String);
+    }
+
+    [SupportedOSPlatform("windows")]
+    private void CreateWindowsService()
+    {
+        var builder = new StringBuilder("New-Service");
+        builder.AppendFormat(" -Name \"{0}\"", Name);
+        builder.AppendFormat(" -DisplayName \"{0}\"", DisplayName);
+        builder.AppendFormat(" -BinaryPathName \"{0}\"", ServicePath);
+        builder.AppendFormat(" -StartupType \"{0}\"", "Automatic");
+        Utils.PowerShell(builder.ToString());
     }
 }

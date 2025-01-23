@@ -22,4 +22,26 @@ public partial struct Application
         if (OperatingSystem.IsWindows())
             RegistryKeys.LocalMachineUninstallX86.DeleteSubKey(Name);
     }
+
+    /// <summary>
+    /// Регистрация сервиса
+    /// </summary>
+    public void RegistrationService()
+    {
+        if (string.IsNullOrWhiteSpace(ServicePath))
+            throw new ArgumentNullException(nameof(ServicePath));
+        if (OperatingSystem.IsWindows())
+            CreateWindowsService();
+    }
+
+    /// <summary>
+    /// Удаление сервиса
+    /// </summary>
+    public void UnregistrationService()
+    {
+        if (string.IsNullOrWhiteSpace(ServicePath))
+            throw new ArgumentNullException(nameof(ServicePath));
+        if (OperatingSystem.IsWindows())
+            Utils.CMD($"sc stop {Name} && sc delete {Name}");
+    }
 }
