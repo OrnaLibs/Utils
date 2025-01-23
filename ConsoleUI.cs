@@ -47,7 +47,7 @@ namespace OrnaLibs
                 Console.WriteLine($"{(index == i ? ">" : " ")} {items[i]}");
             do
             {
-                key = Console.ReadKey().Key;
+                key = Console.ReadKey(true).Key;
                 if (key == ConsoleKey.DownArrow && index < items.Length - 1)
                     SelectItem(index, ++index);
                 else if (key == ConsoleKey.UpArrow && index > 0)
