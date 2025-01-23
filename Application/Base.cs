@@ -20,7 +20,7 @@ public partial struct Application
     public void Unregistration()
     {
         if (OperatingSystem.IsWindows())
-            RegistryKeys.LocalMachineUninstallX86.DeleteSubKey(Name);
+                RegistryKeys.LocalMachineUninstallX86.DeleteSubKey(Name, false);
     }
 
     /// <summary>

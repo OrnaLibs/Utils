@@ -2,6 +2,7 @@ name: Publish Application
 
 on:
   pull_request:
+    types: [ closed ]
     branches: [ "main" ]
 
 jobs:
@@ -37,4 +38,5 @@ jobs:
         files: ${{ steps.vars.outputs.dll }}
         name: ${{ github.event.pull_request.title }}
         tag_name: ${{ github.event.pull_request.title }}
+        body: ${{ github.event.pull_request.body }}
     
