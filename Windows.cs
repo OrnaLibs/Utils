@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.Versioning;
-using System.Text;
 
 namespace OrnaLibs
 {
@@ -12,7 +11,7 @@ namespace OrnaLibs
         /// </summary>
         [SupportedOSPlatform("windows")]
         public static void PowerShell(string script)
-        {
+            {
             var info = new ProcessStartInfo
             {
                 FileName = "powershell",
@@ -23,6 +22,19 @@ namespace OrnaLibs
             };
             Process.Start(info);
         }
+        /// <summary>
+        /// Выполнение скрипта в PowerShell
+        /// </summary>
+        [SupportedOSPlatform("windows")]
+        public static void CMD(string script) =>
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "cmd",
+                Arguments = $"/q /c \"{script}\"",
+                Verb = "runas",
+                CreateNoWindow = true,
+                UseShellExecute = true
+            });
 
         [SupportedOSPlatform("windows")]
         private static (string, string)[] GetSerialPortsWindows()
@@ -34,16 +46,6 @@ namespace OrnaLibs
             for (var i = 0; i < names.Length; i++)
                 ports[i] = ((string)registry.GetValue(names[i])!, names[i].Split('\\')[^1]);
             return ports;
-        }
-        [SupportedOSPlatform("windows")]
-        private static void CreateWindowsService(string name, string displayName, string path)
-        {
-            var builder = new StringBuilder("New-Service");
-            builder.AppendFormat(" -Name \"{0}\"", name);
-            builder.AppendFormat(" -DisplayName \"{0}\"", displayName);
-            builder.AppendFormat(" -BinaryPathName \"{0}\"", path);
-            builder.AppendFormat(" -StartupType \"{0}\"", "Automatic");
-            PowerShell(builder.ToString());
         }
     }
 }
