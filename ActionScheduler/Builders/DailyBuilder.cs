@@ -17,7 +17,7 @@ namespace OrnaLibs.ActionScheduler.Builders
         public DailyAction Build()
         {
             if (!CheckDone()) throw new Exception();
-            return new DailyAction(_action!, _needSave!.Value, _time!.Value);
+            return new DailyAction(_action!, _time!.Value);
         }
     }
 
