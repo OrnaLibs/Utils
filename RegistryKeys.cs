@@ -1,52 +1,31 @@
 ﻿using Microsoft.Win32;
 using System.Runtime.Versioning;
+using System.Text;
 
 namespace OrnaLibs
 {
     [SupportedOSPlatform("windows")]
     public static class RegistryKeys
     {
-        public static class HKLM
+        public static RegistryKey LocalMachineUninstallX86
         {
-            public static RegistryKey Software => Registry.LocalMachine.Software();
-
-            public static RegistryKey SoftwareX86 => Software.Software86();
-
-            public static RegistryKey Uninstall => Software.UninstallPath();
-
-            public static RegistryKey UninstallX86 => SoftwareX86.UninstallPath();
-
-            public static RegistryKey Hardware => Registry.LocalMachine.OpenSubKey("HARDWARE")!;
-
-            public static RegistryKey DeviceMap => Hardware.OpenSubKey("DEVICEMAP")!;
-
-            public static RegistryKey? SerialPorts => DeviceMap.OpenSubKey("SERIALCOMM");
+            get
+            {
+                var path = new StringBuilder();
+                path.Append(@"SOFTWARE\");
+                if (Environment.Is64BitOperatingSystem) path.Append("WOW6432Node\\");
+                path.Append(@"Microsoft\Windows\CurrentVersion\Uninstall\");
+                return Registry.LocalMachine.OpenSubKey(path.ToString(), true)!;
+            }
         }
-
-        public static class HKCU
+        public static RegistryKey LocalMachineUninstall
         {
-            public static RegistryKey Software => Registry.CurrentUser.Software();
-
-            public static RegistryKey SoftwareX86 => Software.Software86();
-
-            public static RegistryKey Uninstall => Software.UninstallPath();
-
-            public static RegistryKey UninstallX86 => SoftwareX86.UninstallPath();
+            get
+            {
+                var path = new StringBuilder();
+                path.Append(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\");
+                return Registry.LocalMachine.OpenSubKey(path.ToString(), true)!;
+            }
         }
-
-        public static class HKCC
-        {
-            public static RegistryKey Software => Registry.CurrentConfig.Software();
-        }
-
-        #region Исправление дублей
-        private static RegistryKey UninstallPath(this RegistryKey software) => 
-            software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Uninstall", true)!;
-
-        private static RegistryKey Software86(this RegistryKey software) =>
-            Environment.Is64BitOperatingSystem ? software.OpenSubKey("WOW6432Node", true)! : software;
-
-        private static RegistryKey Software(this RegistryKey hkey) => hkey.OpenSubKey("Software", true)!;
-        #endregion
     }
 }
