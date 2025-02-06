@@ -15,6 +15,12 @@ namespace OrnaLibs
             public static RegistryKey Uninstall => Software.UninstallPath();
 
             public static RegistryKey UninstallX86 => SoftwareX86.UninstallPath();
+
+            public static RegistryKey Hardware => Registry.LocalMachine.OpenSubKey("HARDWARE")!;
+
+            public static RegistryKey DeviceMap => Hardware.OpenSubKey("DEVICEMAP")!;
+
+            public static RegistryKey? SerialPorts => DeviceMap.OpenSubKey("SERIALCOMM");
         }
 
         public static class HKCU
