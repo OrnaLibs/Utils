@@ -16,4 +16,19 @@
 	<RepositoryUrl>https://github.com/OrnarasUS/OrnaLibs.Utils</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Update="UpdaterConstants.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UpdaterConstants.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="UpdaterConstants.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UpdaterConstants.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
