@@ -3,6 +3,7 @@
     /// <summary>
     /// Планировщик задач
     /// </summary>
+    [Obsolete("Рекомендуется использовать ActionScheduler")]
     public static class TaskScheduler
     {
         private static TimeOnly?[] times = null!;
